@@ -21,9 +21,17 @@ module.exports = {
         stream = await ytdlDiscord(song.url, { highWaterMark: 1 << 25 });
       } else if (song.url.includes("soundcloud.com")) {
         try {
-          stream = await scdl.downloadFormat(song.url, scdl.FORMATS.OPUS, SOUNDCLOUD_CLIENT_ID ? SOUNDCLOUD_CLIENT_ID : undefined);
+          stream = await scdl.downloadFormat(
+            song.url,
+            scdl.FORMATS.OPUS,
+            SOUNDCLOUD_CLIENT_ID ? SOUNDCLOUD_CLIENT_ID : undefined
+          );
         } catch (error) {
-          stream = await scdl.downloadFormat(song.url, scdl.FORMATS.MP3, SOUNDCLOUD_CLIENT_ID ? SOUNDCLOUD_CLIENT_ID : undefined);
+          stream = await scdl.downloadFormat(
+            song.url,
+            scdl.FORMATS.MP3,
+            SOUNDCLOUD_CLIENT_ID ? SOUNDCLOUD_CLIENT_ID : undefined
+          );
           streamType = "unknown";
         }
       }
@@ -56,7 +64,7 @@ module.exports = {
           module.exports.play(queue.songs[0], message);
         }
       })
-      .on("error", (err) => {
+      .on("error", err => {
         console.error(err);
         queue.songs.shift();
         module.exports.play(queue.songs[0], message);
@@ -64,7 +72,7 @@ module.exports = {
     dispatcher.setVolumeLogarithmic(queue.volume / 100);
 
     try {
-      var playingMessage = await queue.textChannel.send(`🎶 Started playing: **${song.title}** ${song.url}`);
+      var playingMessage = await queue.textChannel.send(`🎶 Started playing: **${song.title}** `);
       await playingMessage.react("⏭");
       await playingMessage.react("⏯");
       await playingMessage.react("🔁");
